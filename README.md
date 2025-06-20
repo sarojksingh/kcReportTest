@@ -53,7 +53,7 @@ Separate endpoint created for each report so it can be used as: http://localhost
     - Group by: store_id, category_id
     - Show: total sales amount, rank within store
     - Filtered by: date range (any 3 months)
-    - Date range can be passed as GET params (i.e. - http://localhost:8080/top-categories-by-store?start=2024-06-01&end=2025-06-20)
+    - Date range can be passed as GET params (i.e. - http://localhost:8080/top-categories-by-store?start=2025-03-01&end=2025-06-20)
 
 ### Task Requirements
 

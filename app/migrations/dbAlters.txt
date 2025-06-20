@@ -1,0 +1,21 @@
+---------------------------------------------------------------
+-- Following table alters must applied to get Optimized results
+---------------------------------------------------------------
+
+ALTER TABLE `stores`
+	ADD INDEX `stores_region_id` (`store_id`, `region_id`);
+
+ALTER TABLE `orders`
+	ADD INDEX `orders_index_order_date` (`order_date`),
+	ADD INDEX `orders_index_storeID_orderDate` (`store_storeId`, `order_date`),
+	ADD INDEX `orders_index_productId_orderDate` (`product_productId`, `order_date`);
+
+ALTER TABLE orders 
+	ADD COLUMN order_year INT GENERATED ALWAYS AS (YEAR(order_date)) STORED,
+	ADD COLUMN order_month INT GENERATED ALWAYS AS (MONTH(order_date)) STORED;
+
+ALTER TABLE `orders`
+	ADD INDEX `orders_idx_order_year_month_storeId` (`order_year`, `order_month`, `store_storeId`);
+
+ALTER TABLE `products`
+	ADD INDEX `products_idx_productId_categoryId` (`product_id`, `category_id`);

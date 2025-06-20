@@ -14,6 +14,10 @@ use Psr\Http\Message\ResponseInterface;
 use Cycle\Database\Injection\Fragment;
 use Spiral\Views\ViewInterface;
 use DateTime;
+use Psr\Log\LoggerInterface;
+use Spiral\Http\Request\InputManager;
+use Spiral\Http\Request\InputInterface;
+
 
 #[Group(route: '/')]
 class ReportController
@@ -24,18 +28,19 @@ class ReportController
     public function __construct(
         private DatabaseInterface $db,
         //private DatabaseProviderInterface $dbal,
-        private ResponseWrapper $response
+        private ResponseWrapper $response,
         //private ViewInterface $views
+        private LoggerInterface $logger,
+        private InputManager $input,
     ) {}
 
     #[Route(route: '/monthly-sales-by-region', methods: 'GET')]
     public function monthlySales(): String
     {
-        $start = $_GET['start'] ?? date('Y-m-d', strtotime('-12 months'));
-        $end   = $_GET['end'] ?? date('Y-m-d');
+        $start = $this->input->query('start', date('Y-m-d', strtotime('-12 months')));
+        $end   = $this->input->query('end', date('Y-m-d'));
 
         $startTime = microtime(true);
-
 
         $query = "SELECT 
                 o.order_year,
@@ -90,11 +95,10 @@ class ReportController
     }
 
     #[Route(route: '/top-categories-by-store', methods: 'GET')]
-    public function topCategories()
+    public function topCategories(InputManager $input)
     {
-        //$date = new Date();
-        $start = $_GET['start'] ?? date('Y-m-d', strtotime('-3 months'));
-        $end   = $_GET['end'] ?? date('Y-m-d');
+        $start = $input->query('start', date('Y-m-d', strtotime('-3 months')));
+        $end = $input->query('end', date('Y-m-d'));
 
         $error = null;
         $result = [];
@@ -144,7 +148,7 @@ class ReportController
 
         return $this->views->render('reports/top-category-store', [
             'data' => $result,
-            'execution_time_ms' => $executionTime,
+            'execution_time_ms' => $executionTime ?? "00:00",
             'start' => $start,
             'end' => $end,
             'error' => $error,

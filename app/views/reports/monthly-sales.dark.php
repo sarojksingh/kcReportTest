@@ -1,4 +1,4 @@
-<extends:layout.base title="[[The PHP Framework for future Innovators]]" />
+<extends:layout.base title="[[Monthly Sales Report]]" />
 
 <stack:push name="styles">
     <link rel="stylesheet" href="/styles/welcome.css" />
